@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva de Enfermedad de Crohn</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950">
+
+    <div id="app-container" class="relative min-h-screen lg:flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 bg-slate-900 text-slate-300 w-80 p-6 flex flex-col transform -translate-x-full transition-transform duration-300 ease-in-out z-30 shadow-2xl">
+            <div class="flex-1 overflow-y-auto min-h-0 pr-2">
+                <h2 class="text-2xl font-bold text-center text-sky-400 border-b border-slate-700 pb-4 mb-6">Guía de Enfermedad de Crohn</h2>
+                <ul id="module-list" class="space-y-2"></ul>
+            </div>
+            <div class="pt-4 border-t border-slate-700">
+                <button id="bibliography-button" class="w-full bg-slate-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-all hover:bg-slate-600 active:scale-95 mb-2 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 16c1.255 0 2.443-.29 3.5-.804V4.804zM14.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 0114.5 16c1.255 0 2.443-.29 3.5-.804v-10A7.968 7.968 0 0014.5 4z" /></svg>
+                    Bibliografía
+                </button>
+                <button id="reset-button" class="w-full bg-red-600/90 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-all hover:bg-red-600 active:scale-95 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7V9a1 1 0 01-2 0V3a1 1 0 011-1zm12 1a1 1 0 011 1v3.099A5.002 5.002 0 008.113 14.666 1 1 0 016.228 14A7.002 7.002 0 0115.898 7.534V5a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                    Reiniciar Progreso
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 p-4 sm:p-6 lg:p-8 transition-all duration-300">
+            <!-- Home button to return to learning path -->
+            <button id="home-button" class="hidden fixed top-4 left-4 bg-white dark:bg-slate-800 p-2 rounded-full shadow-lg z-40 text-slate-600 dark:text-slate-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+            </button>
+            
+            <!-- Hamburger button for mobile -->
+            <button id="menu-toggle" class="hidden lg:hidden fixed top-4 right-4 bg-white dark:bg-slate-800 p-2 rounded-full shadow-lg z-40 text-slate-600 dark:text-slate-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+
+            <div id="progress-container" class="w-full bg-slate-200 dark:bg-slate-700 rounded-full mb-8 shadow-inner">
+                <div id="progress-bar" class="bg-sky-500 text-xs font-medium text-white text-center p-1.5 leading-none rounded-full transition-all duration-500" style="width: 0%">0%</div>
+            </div>
+            <div id="module-display" class="transition-opacity duration-300">
+                <!-- El contenido del módulo se insertará aquí -->
+            </div>
+        </main>
+        
+        <div id="sidebar-overlay" class="hidden lg:hidden fixed inset-0 bg-black bg-opacity-60 z-20"></div>
+
+    </div>
+    
+    <!-- Reset Modal -->
+    <div id="reset-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 max-w-sm w-full text-center transform scale-95 transition-transform duration-300">
+            <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">Confirmar Acción</h3>
+            <p class="text-slate-600 dark:text-slate-400 my-4">¿Estás seguro de que quieres borrar todo tu progreso? Esta acción no se puede deshacer.</p>
+            <div class="flex justify-center gap-4 mt-6">
+                <button id="cancel-reset" class="py-2 px-6 bg-slate-200 text-slate-800 font-semibold rounded-lg hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 transition-colors">Cancelar</button>
+                <button id="confirm-reset" class="py-2 px-6 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bibliography Modal -->
+    <div id="bibliography-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 max-w-3xl w-full text-left transform scale-95 transition-transform duration-300 relative">
+            <button id="close-bibliography-modal" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 border-b dark:border-slate-700 pb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 16c1.255 0 2.443-.29 3.5-.804V4.804zM14.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 0114.5 16c1.255 0 2.443-.29 3.5-.804v-10A7.968 7.968 0 0014.5 4z" /></svg>
+                Fuentes Bibliográficas
+            </h3>
+            <div id="bibliography-content" class="text-slate-600 dark:text-slate-400 my-4 space-y-3 max-h-[70vh] overflow-y-auto pr-4">
+                <!-- Bibliography will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Modal -->
+    <div id="summary-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 max-w-4xl w-full text-left transform scale-95 transition-transform duration-300 relative">
+            <button id="close-summary-modal" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 id="summary-modal-title" class="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center gap-3 border-b dark:border-slate-700 pb-4">
+                <!-- Title will be injected here -->
+            </h3>
+            <div id="summary-content" class="text-slate-700 dark:text-slate-300 my-4 space-y-4 max-h-[70vh] overflow-y-auto pr-4">
+                <!-- Summary will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <button id="dark-mode-toggle" class="fixed bottom-4 right-4 bg-white dark:bg-slate-700 p-3 rounded-full shadow-lg z-50 text-slate-600 dark:text-yellow-300 transition-colors duration-300">
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
+
+
+    <script>
+        const summaryContentHtml = `
+            <div class="space-y-6">
+                <div>
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-slate-200">1. Principios Fundamentales y Diagnóstico Multimodal</h4>
+                    <p>La Enfermedad de Crohn (EC) es una enfermedad inflamatoria intestinal (EII) crónica, de presunta etiología autoinmune, que puede afectar cualquier segmento del tracto gastrointestinal de forma <strong>transmural y discontinua</strong>. Su diagnóstico es un rompecabezas que integra la clínica (dolor abdominal, diarrea, pérdida de peso), biomarcadores (<strong>Calprotectina Fecal, PCR</strong>), hallazgos endoscópicos (úlceras aftoides/serpiginosas, patrón en empedrado) con histología (granulomas no caseificantes, inflamación crónica), y la imagenología de sección transversal (<strong>Entero-RM/TC</strong>) para evaluar el intestino delgado y las complicaciones transmurales (estenosis, fístulas, abscesos).</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-slate-200">2. Estratificación del Riesgo y Estrategia "Treat-to-Target" (T2T)</h4>
+                    <p>El manejo moderno se basa en una <strong>estratificación de riesgo temprana</strong> para predecir el curso de la enfermedad. Factores de mal pronóstico incluyen edad joven al diagnóstico (<30 años), tabaquismo, enfermedad perianal extensa, y enfermedad estenosante/penetrante al inicio. En pacientes de alto riesgo, se favorece un enfoque "top-down", iniciando tempranamente con terapias avanzadas. La estrategia <strong>"Treat-to-Target"</strong> (T2T) establece objetivos terapéuticos más allá de la remisión clínica, buscando la <strong>remisión endoscópica</strong> (curación de la mucosa) y, progresivamente, la <strong>curación transmural</strong>, monitorizando con biomarcadores e imagen para ajustar el tratamiento de forma proactiva y así alterar la historia natural de la enfermedad.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-slate-200">3. Arsenal Terapéutico y Manejo Médico</h4>
+                    <p>La inducción en enfermedad leve a moderada puede realizarse con corticoides (budesonida o sistémicos). En enfermedad moderada a severa, el pilar son las <strong>terapias avanzadas</strong>: <strong>1) Anti-TNF</strong> (infliximab, adalimumab), <strong>2) Anti-integrina</strong> (vedolizumab, selectivo del intestino), <strong>3) Anti-interleucinas</strong> (ustekinumab, anti-IL12/23), y <strong>4) Inhibidores de JAK</strong> (upadacitinib). La elección se individualiza según la severidad, fenotipo, manifestaciones extraintestinales y comorbilidades. El <strong>monitoreo farmacológico (TDM)</strong> de niveles de fármaco y anticuerpos es crucial para optimizar la terapia y manejar la pérdida de respuesta. La <strong>terapia combinada</strong> (biológico + inmunomodulador) se considera en pacientes seleccionados para aumentar la eficacia y disminuir la inmunogenicidad.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-slate-200">4. Cirugía y Manejo de Complicaciones</h4>
+                    <p>A pesar del avance médico, una proporción significativa de pacientes requerirá cirugía. Las indicaciones incluyen fracaso del tratamiento médico, estenosis fibróticas sintomáticas, abscesos, fístulas complejas, y hemorragia o perforación. La cirugía más común es la <strong>resección ileocecal</strong>. La clave del éxito a largo plazo es la <strong>prevención de la recurrencia postoperatoria</strong>. Esto implica estratificar el riesgo de recurrencia (el tabaquismo es el factor principal) y realizar una colonoscopia a los 6-12 meses. En pacientes de alto riesgo, se inicia terapia biológica profiláctica tempranamente tras la cirugía. La enfermedad perianal (fístulas, abscesos) requiere un enfoque multidisciplinar con drenaje quirúrgico y optimización del tratamiento médico, a menudo con anti-TNF.</p>
+                </div>
+                 <div>
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-slate-200">5. Seguimiento Holístico y Poblaciones Especiales</h4>
+                    <p>El manejo de la EC va más allá del intestino. Se debe realizar un <strong>cuidado preventivo</strong> activo, incluyendo vacunaciones, cribado de cáncer de piel (especialmente en pacientes con tiopurinas), y de displasia colónica mediante colonoscopia de vigilancia. La <strong>nutrición</strong> es fundamental, con la Nutrición Enteral Exclusiva (NEE) como terapia de inducción de primera línea en pediatría. En el embarazo, el control de la actividad de la enfermedad es crucial para buenos resultados materno-fetales, y la mayoría de las terapias (incluyendo biológicos) se consideran seguras y deben continuarse. La <strong>calidad de vida</strong>, incluyendo la fatiga y la salud mental, debe ser evaluada y manejada como un objetivo terapéutico más.</p>
+                </div>
+            </div>
+        `;
+        
+        const courseModules = [
+            {
+                id: 1,
+                displayNumber: 1,
+                title: "Módulo 1: ¿Qué es la Enfermedad de Crohn? Conceptos Fundamentales",
+                summary: `La Enfermedad de Crohn (EC) es una inflamación crónica que puede afectar cualquier parte del tubo digestivo, desde la boca hasta el ano. Sus dos características clave son que la inflamación es <strong>transmural</strong> (atraviesa todo el grosor de la pared del intestino) y <strong>segmentaria</strong> (deja áreas de intestino sano entre las zonas afectadas, como parches). La causa es una mezcla de factores genéticos y ambientales, donde el sistema inmune reacciona de forma exagerada. El <strong>tabaquismo</strong> es el factor de riesgo más importante que una persona puede cambiar.`,
+                clinicalCase: `Un hombre de 22 años acude a consulta por llevar 3 meses con dolor en el lado inferior derecho del abdomen, diarrea sin sangre y una pérdida de 8 kg de peso. Es fumador. Al explorarlo, solo destaca el dolor en esa zona. Sus análisis de sangre muestran anemia leve e inflamación (PCR elevada).<br><br><strong>Pregunta clave:</strong> Con estos datos clásicos, ¿cuál es el diagnóstico más probable y qué hábito del paciente empeora más su pronóstico?`,
+                clinicalCaseAnswer: `El diagnóstico más probable es <strong>Enfermedad de Crohn</strong>, por la combinación de edad, dolor en fosa ilíaca derecha, diarrea crónica y pérdida de peso. El hábito que más empeora su pronóstico es el <strong>tabaquismo</strong>, ya que se asocia a una enfermedad más agresiva, con más complicaciones y peor respuesta al tratamiento.`,
+                quiz: [
+                    {
+                        question: `¿Cuál es la principal diferencia entre la inflamación de la Enfermedad de Crohn y la de la Colitis Ulcerosa?`,
+                        options: [
+                            "La de Crohn siempre produce sangrado y la de Colitis Ulcerosa no.",
+                            "La de Crohn solo afecta al colon y la Colitis Ulcerosa a todo el tubo digestivo.",
+                            "La de Crohn es superficial y la de Colitis Ulcerosa es profunda (transmural).",
+                            "La de Crohn es transmural (profunda) y la de Colitis Ulcerosa es superficial (mucosa)."
+                        ],
+                        answer: 3,
+                        justification: `Esta es la diferencia fundamental. La inflamación transmural (que atraviesa todas las capas) en Crohn es lo que causa complicaciones como estenosis (estrecheces) y fístulas (túneles), mientras que la inflamación superficial de la Colitis Ulcerosa no suele provocarlas.`,
+                        source: `Dolinger M, Torres J, Vermeire S. Crohn's disease. The Lancet. 2024; S0140-6736(24)01463-7. doi:10.1016/S0140-6736(24)01463-7.`
+                    },
+                    {
+                        question: `¿Qué parte del tubo digestivo se afecta con más frecuencia en la Enfermedad de Crohn?`,
+                        options: [
+                            "El esófago y el estómago.",
+                            "El recto exclusivamente.",
+                            "El íleon terminal (la parte final del intestino delgado) y el colon.",
+                            "El apéndice."
+                        ],
+                        answer: 2,
+                        justification: `La localización más habitual es la ileocólica, afectando la unión entre el intestino delgado y el grueso. Por eso, el dolor en la fosa ilíaca derecha es un síntoma tan característico.`,
+                        source: `Kucharzik T, Taylor S, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 1. J Crohns Colitis. 2025;19(7):jjaf106. doi:10.1093/ecco-jcc/jjaf106.`
+                    },
+                    {
+                        question: `(Metacognitiva) Un paciente joven tiene diarrea crónica sin sangre y dolor abdominal. Podría ser un Síndrome de Intestino Irritable (SII), pero ¿qué dato de la historia clínica te haría pensar inmediatamente en algo más serio como la Enfermedad de Crohn?`,
+                        options: [
+                            "Que la diarrea empeore con el estrés.",
+                            "Que tenga hinchazón abdominal después de comer.",
+                            "Que haya perdido peso sin intentarlo.",
+                            "Que los síntomas mejoren después de ir al baño."
+                        ],
+                        answer: 2,
+                        justification: `La pérdida de peso involuntaria es una "bandera roja". Indica que el cuerpo está en un estado catabólico (consumiendo sus propias reservas), probablemente debido a una inflamación sistémica o a malabsorción de nutrientes, algo que no ocurre en el SII, que es un trastorno funcional.`,
+                        source: `Dolinger M, Torres J, Vermeire S. Crohn's disease. The Lancet. 2024; S0140-6736(24)01463-7. doi:10.1016/S0140-6736(24)01463-7.`
+                    },
+                    {
+                        question: `¿Cuál de estos factores ambientales es el más perjudicial para un paciente con Enfermedad de Crohn?`,
+                        options: [
+                            "Beber café.",
+                            "Fumar cigarrillos.",
+                            "Comer alimentos picantes.",
+                            "Tomar paracetamol para el dolor."
+                        ],
+                        answer: 1,
+                        justification: `El tabaquismo es el factor de riesgo modificable más importante. Aumenta el riesgo de desarrollar la enfermedad, la hace más agresiva, disminuye la respuesta a los tratamientos y aumenta la probabilidad de necesitar cirugía.`,
+                        source: `Farraye FA, Melmed GY, Lichtenstein GR, et al. ACG Clinical Guideline Update: Preventive Care in Inflammatory Bowel Disease. Am J Gastroenterol. 2025;120(9):1447-1473. doi:10.14309/ajg.0000000000003050.`
+                    },
+                    {
+                        question: `Cuando decimos que la afectación de Crohn es "segmentaria" o en "parches", ¿a qué nos referimos?`,
+                        options: [
+                            "A que solo afecta a la capa más externa del intestino.",
+                            "A que la inflamación aparece y desaparece cada pocos días.",
+                            "A que afecta a todo el intestino de forma continua y uniforme.",
+                            "A que existen zonas de intestino inflamado alternadas con zonas de intestino completamente sano."
+                        ],
+                        answer: 3,
+                        justification: `Esta es una característica clave. Un endoscopista puede ver un trozo de colon con úlceras severas, luego un segmento de apariencia normal, y más adelante encontrar de nuevo inflamación. Estas "skip lesions" o lesiones salteadas son típicas de Crohn.`,
+                        source: `Kucharzik T, Taylor S, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 1. J Crohns Colitis. 2025;19(7):jjaf106. doi:10.1093/ecco-jcc/jjaf106.`
+                    }
+                ]
+            },
+            {
+                id: 2,
+                displayNumber: 2,
+                title: "Módulo 2: ¿Por Qué Ocurre? Fisiopatología y Presentación Clínica",
+                summary: `La EC ocurre por una respuesta exagerada y fuera de control del sistema inmune contra las bacterias normales del intestino en personas con predisposición genética. Esta respuesta produce una inflamación crónica. Al ser <strong>transmural</strong> (profunda), esta inflamación puede llevar a dos tipos de complicaciones principales: <strong>estenosis</strong> (cicatrices que estrechan el intestino y causan obstrucción) y <strong>fístulas</strong> (túneles que comunican el intestino con otros órganos o la piel). Clínicamente, los pacientes se pueden agrupar en tres patrones o "comportamientos": <strong>inflamatorio</strong> (predomina la diarrea y el dolor), <strong>estenosante</strong> (predominan los síntomas de obstrucción) o <strong>penetrante/fistulizante</strong> (formación de fístulas y abscesos).`,
+                clinicalCase: `Una mujer de 28 años con diagnóstico de EC desde hace 5 años, tratada irregularmente, acude a urgencias por dolor abdominal tipo cólico muy intenso, náuseas y vómitos biliosos desde hace 24 horas. No ha podido defecar ni expulsar gases en las últimas 12 horas. Su abdomen está distendido y timpánico.<br><br><strong>Pregunta clave:</strong> Basado en la fisiopatología de la EC, ¿qué complicación explica mejor este cuadro clínico de obstrucción intestinal?`,
+                clinicalCaseAnswer: `Una <strong>estenosis fibrótica</strong> en el intestino delgado. La inflamación crónica y transmural de la EC provoca ciclos de daño y cicatrización en la pared intestinal. Esta cicatrización (fibrosis) es rígida y no se relaja, llevando a un estrechamiento permanente del lumen (estenosis). Este estrechamiento es el que causa la obstrucción intestinal mecánica que presenta la paciente.`,
+                quiz: [
+                    {
+                        question: `Un paciente con EC desarrolla un absceso (una colección de pus) junto al intestino. ¿Qué característica fundamental de la inflamación en Crohn permite esta complicación?`,
+                        options: [
+                            "La naturaleza discontinua de la inflamación.",
+                            "La afectación predominante del íleon.",
+                            "La inflamación transmural, que permite que las bacterias atraviesen la pared intestinal.",
+                            "La formación de granulomas."
+                        ],
+                        answer: 2,
+                        justification: `La inflamación transmural significa que la barrera intestinal está dañada en todo su grosor. Esto permite que las bacterias del interior del intestino se "escapen" hacia la cavidad abdominal, formando abscesos y fístulas. Es una consecuencia directa de la profundidad de la inflamación.`,
+                        source: `Dolinger M, Torres J, Vermeire S. Crohn's disease. The Lancet. 2024; S0140-6736(24)01463-7. doi:10.1016/S0140-6736(24)01463-7.`
+                    },
+                    {
+                        question: `¿Qué significa el "comportamiento penetrante" o "fistulizante" de la Enfermedad de Crohn?`,
+                        options: [
+                            "Que el paciente tiene dolor muy agudo.",
+                            "Que la enfermedad ha desarrollado la capacidad de formar túneles (fístulas) desde el intestino hacia otros órganos o la piel.",
+                            "Que la inflamación está causando un estrechamiento severo del intestino.",
+                            "Que la enfermedad responde muy bien al tratamiento inicial."
+                        ],
+                        answer: 1,
+                        justification: `El comportamiento penetrante es una de las formas más graves de la enfermedad. La inflamación transmural erosiona la pared intestinal hasta perforarla, creando un trayecto anormal (fístula) que puede conectar con la vejiga (causando infecciones de orina recurrentes), la piel (drenando material intestinal) u otras asas de intestino.`,
+                        source: `Adamina M, Minozzi S, Warusavitarne J, et al. ECCO Guidelines on Therapeutics in Crohn's Disease: Surgical Treatment. J Crohns Colitis. 2024;18(10):1556-1582. doi:10.1093/ecco-jcc/jjae089.`
+                    },
+                    {
+                        question: `En una colonoscopia, el endoscopista describe la mucosa con un "patrón en empedrado" (cobblestone). ¿Qué está viendo?`,
+                        options: [
+                            "Un intestino completamente normal.",
+                            "Múltiples pólipos pequeños, sugestivos de cáncer.",
+                            "Áreas de úlceras profundas y lineales que se cruzan, dejando islotes de mucosa inflamada entre ellas.",
+                            "Una mucosa pálida y atrófica."
+                        ],
+                        answer: 2,
+                        justification: `El aspecto de empedrado es un hallazgo clásico de la EC. Se produce por la presencia de úlceras profundas que recorren la mucosa, entrecruzándose y aislando pequeñas áreas de mucosa que se hinchan (edema). El conjunto se asemeja a una calle antigua pavimentada con adoquines.`,
+                        source: `Kucharzik T, Taylor S, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 1. J Crohns Colitis. 2025;19(7):jjaf106. doi:10.1093/ecco-jcc/jjaf106.`
+                    },
+                    {
+                        question: `¿Cuál de los siguientes NO es uno de los tres comportamientos principales de la enfermedad según la Clasificación de Montreal?`,
+                        options: [
+                            "Inflamatorio (no estenosante, no penetrante).",
+                            "Estenosante.",
+                            "Hemorrágico.",
+                            "Penetrante (fistulizante)."
+                        ],
+                        answer: 2,
+                        justification: `La Clasificación de Montreal, que ayuda a predecir el curso de la enfermedad, la divide en tres patrones: inflamatorio (B1), estenosante (B2) y penetrante (B3). Aunque los pacientes con Crohn pueden sangrar, el comportamiento "hemorrágico" no es una categoría principal, a diferencia de la Colitis Ulcerosa, donde la hemorragia es más definitoria.`,
+                        source: `Dolinger M, Torres J, Vermeire S. Crohn's disease. The Lancet. 2024; S0140-6736(24)01463-7. doi:10.1016/S0140-6736(24)01463-7.`
+                    },
+                    {
+                        question: `(Metacognitiva) Un paciente con Enfermedad de Crohn te pregunta por qué su médico le ha insistido tanto en que deje de fumar, si él "fuma para relajarse". ¿Cuál es la explicación más sencilla y directa sobre la fisiopatología del tabaco en la EC?`,
+                        options: [
+                            "El tabaco simplemente irrita el intestino.",
+                            "El tabaco no tiene un efecto real, es solo una recomendación general de salud.",
+                            "El tabaco contiene sustancias que potencian la respuesta inmunitaria anormal de la enfermedad, haciendo que la inflamación sea más agresiva y difícil de controlar con los medicamentos.",
+                            "El humo del tabaco compite con el oxígeno y daña la mucosa intestinal."
+                        ],
+                        answer: 2,
+                        justification: `Esta es la forma más clara de explicarlo. No es una simple "irritación". El tabaco actúa como un potente inmunomodulador negativo en la EC. Activa las células y vías inflamatorias que ya están descontroladas en la enfermedad, echando "gasolina al fuego" y haciendo que los tratamientos sean menos efectivos.`,
+                        source: `Farraye FA, Melmed GY, Lichtenstein GR, et al. ACG Clinical Guideline Update: Preventive Care in Inflammatory Bowel Disease. Am J Gastroenterol. 2025;120(9):1447-1473. doi:10.14309/ajg.0000000000003050.`
+                    }
+                ]
+            },
+            {
+                id: 3,
+                displayNumber: 3,
+                title: "Módulo 3: El Proceso Diagnóstico: Uniendo las Piezas",
+                summary: `El diagnóstico de la EC es como resolver un rompecabezas: se basa en la combinación de la <strong>historia clínica</strong> (síntomas), la <strong>exploración física</strong> (buscando dolor, masas o problemas perianales) y las <strong>pruebas complementarias</strong>. Los análisis de sangre iniciales buscan signos de inflamación (<strong>PCR elevada</strong>) y sus consecuencias (<strong>anemia</strong>). La <strong>calprotectina fecal</strong> es una prueba en heces muy útil: si es negativa, es muy poco probable que haya inflamación intestinal, ayudando a diferenciar la EC del Síndrome de Intestino Irritable. El paso definitivo es la <strong>ileocolonoscopia</strong>, que permite ver directamente el intestino, observar las lesiones típicas y tomar <strong>biopsias</strong> para confirmar el diagnóstico al microscopio.`,
+                clinicalCase: `Una joven de 19 años consulta por 2 meses de diarrea y dolor abdominal vago. No ha perdido peso. Su médico de atención primaria sospecha un Síndrome de Intestino Irritable (SII), pero para estar seguro, solicita una calprotectina fecal. El resultado es de 850 µg/g (valor normal < 50 µg/g).<br><br><strong>Pregunta clave:</strong> ¿Qué significa este resultado y cuál es el siguiente paso ineludible en el estudio de esta paciente?`,
+                clinicalCaseAnswer: `Un valor de calprotectina fecal tan elevado indica de forma muy fiable que existe una <strong>inflamación significativa en el tracto gastrointestinal</strong>, haciendo el diagnóstico de SII muy improbable. El siguiente paso ineludible es realizar una <strong>ileocolonoscopia con toma de biopsias</strong> para visualizar la mucosa, determinar la localización y el patrón de la inflamación, y obtener una confirmación histológica.`,
+                quiz: [
+                    {
+                        question: `¿Cuál es la principal utilidad de medir la calprotectina fecal en un paciente con diarrea crónica?`,
+                        options: [
+                            "Diagnosticar específicamente la Enfermedad de Crohn.",
+                            "Diferenciar entre una causa inflamatoria (como la EII) y una causa funcional (como el SII).",
+                            "Detectar la presencia de sangre oculta en heces.",
+                            "Evaluar si el paciente tiene intolerancia a la lactosa."
+                        ],
+                        answer: 1,
+                        justification: `La calprotectina es una proteína liberada por los neutrófilos, un tipo de glóbulo blanco que acude a los sitios de inflamación. Un nivel alto en heces nos dice "hay inflamación en el intestino", pero no nos dice la causa exacta. Su gran valor es que si es negativa, podemos descartar con mucha seguridad una EII y evitar endoscopias innecesarias.`,
+                        source: `Clough J, Colwill M, Poullis A, et al. Biomarkers in inflammatory bowel disease: a practical guide. Ther Adv Gastroenterol. 2024;17:17562848241261313. doi:10.1177/17562848241261313.`
+                    },
+                    {
+                        question: `¿Cuál se considera el "gold standard" (la prueba de oro) para el diagnóstico de la Enfermedad de Crohn que afecta al colon o al íleon terminal?`,
+                        options: [
+                            "Una Tomografía Computarizada (TC) de abdomen.",
+                            "Un análisis de sangre que mida anticuerpos.",
+                            "Una ecografía abdominal.",
+                            "Una ileocolonoscopia con toma de biopsias."
+                        ],
+                        answer: 3,
+                        justification: `La ileocolonoscopia es la prueba fundamental porque permite hacer tres cosas a la vez: ver directamente las lesiones (úlceras, patrón en empedrado), evaluar la distribución de la enfermedad (continua vs. segmentaria) y, lo más importante, obtener muestras de tejido (biopsias) para que el patólogo confirme la presencia de inflamación crónica.`,
+                        source: `Kucharzik T, Taylor S, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 1. J Crohns Colitis. 2025;19(7):jjaf106. doi:10.1093/ecco-jcc/jjaf106.`
+                    },
+                    {
+                        question: `Durante la exploración física de un paciente con sospecha de EC, ¿qué parte del examen es fundamental y no debe omitirse nunca?`,
+                        options: [
+                            "La auscultación pulmonar.",
+                            "La medición de la presión arterial en ambos brazos.",
+                            "La inspección detallada de la región perianal.",
+                            "La palpación del tiroides."
+                        ],
+                        answer: 2,
+                        justification: `La enfermedad perianal (fisuras, fístulas, abscesos, skin tags) es muy frecuente y específica de la Enfermedad de Crohn. Encontrar signos de enfermedad perianal en la exploración apoya fuertemente el diagnóstico y, además, indica un pronóstico potencialmente más complicado.`,
+                        source: `Dolinger M, Torres J, Vermeire S. Crohn's disease. The Lancet. 2024; S0140-6736(24)01463-7. doi:10.1016/S0140-6736(24)01463-7.`
+                    },
+                    {
+                        question: `¿Por qué es importante tomar biopsias de la mucosa del colon que parece sana durante una colonoscopia por sospecha de EII?`,
+                        options: [
+                            "Para descartar la presencia de pólipos.",
+                            "Porque la enfermedad puede tener inflamación microscópica aunque la mucosa parezca normal a simple vista.",
+                            "Es un requisito legal del procedimiento.",
+                            "Para aumentar el tiempo y el coste del estudio."
+                        ],
+                        answer: 1,
+                        justification: `Debido a la naturaleza segmentaria de la EC, puede haber inflamación a nivel celular (microscópico) en áreas que parecen sanas al ojo del endoscopista. Tomar biopsias de áreas "normales" ayuda a establecer la verdadera extensión de la enfermedad y a diferenciarla de otras colitis.`,
+                        source: `Yanai H, Feakins R, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 2. J Crohns Colitis. 2025;19(7):jjaf107. doi:10.1093/ecco-jcc/jjaf107.`
+                    },
+                    {
+                        question: `(Metacognitiva) Un paciente tiene síntomas compatibles con EC, pero su Proteína C Reactiva (PCR) en sangre es normal. ¿Deberías descartar la enfermedad basándote solo en este resultado?`,
+                        options: [
+                            "Sí, una PCR normal descarta inflamación activa.",
+                            "Sí, pero solo si la hemoglobina también es normal.",
+                            "No, porque la PCR es un marcador que solo se eleva en infecciones, no en la EC.",
+                            "No, porque hasta un 30% de los pacientes con EC activa pueden tener una PCR normal. Se necesita un marcador más sensible como la calprotectina fecal."
+                        ],
+                        answer: 3,
+                        justification: `Este es un punto clínico crucial. La PCR es un marcador de inflamación sistémica, pero no todos los pacientes con EC montan una respuesta sistémica detectable. La inflamación puede estar localizada en el intestino. Por eso la calprotectina fecal, que mide la inflamación directamente en el intestino, es un biomarcador mucho más sensible para la actividad de la EII.`,
+                        source: `Clough J, Colwill M, Poullis A, et al. Biomarkers in inflammatory bowel disease: a practical guide. Ther Adv Gastroenterol. 2024;17:17562848241261313. doi:10.1177/17562848241261313.`
+                    }
+                ]
+            },
+            {
+                id: 4,
+                displayNumber: 4,
+                title: "Módulo 4: El Papel de la Imagen y la Clasificación",
+                summary: `La colonoscopia solo ve el colon y el final del íleon. Como la EC puede afectar a todo el intestino delgado, necesitamos "fotografiarlo" por dentro. Para esto usamos estudios de imagen como la <strong>Entero-Tomografía (Entero-TC)</strong> o la <strong>Entero-Resonancia (Entero-RM)</strong>. Estas pruebas nos permiten ver el grosor de la pared del intestino, si hay estrecheces (estenosis) y si existen complicaciones fuera del intestino como abscesos o fístulas. La Entero-RM es la preferida en pacientes jóvenes porque no usa radiación. Una vez diagnosticada, usamos la <strong>Clasificación de Montreal</strong> para categorizar la enfermedad según la <strong>Edad</strong> del diagnóstico (A), la <strong>Localización</strong> (L) y el <strong>Comportamiento</strong> (B: inflamatorio, estenosante o penetrante), lo que nos ayuda a predecir cómo será la enfermedad a futuro.`,
+                clinicalCase: `Un paciente de 25 años es diagnosticado de EC en el colon mediante colonoscopia. Se inicia tratamiento y mejora, pero persiste con dolor abdominal y anemia. Su calprotectina fecal sigue elevada. Se sospecha que puede tener más enfermedad no vista en la colonoscopia.<br><br><strong>Pregunta clave:</strong> ¿Qué prueba de imagen es la más adecuada para estudiar el resto del intestino delgado en este paciente joven y por qué?`,
+                clinicalCaseAnswer: `La prueba de elección es una <strong>Entero-Resonancia Magnética (Entero-RM)</strong>. Es la más adecuada porque ofrece una excelente visualización del intestino delgado y de las posibles complicaciones transmurales (como estenosis o fístulas) sin exponer al paciente a radiación ionizante. Dado que es un paciente joven con una enfermedad crónica que probablemente requerirá múltiples estudios de imagen a lo largo de su vida, evitar la radiación es una prioridad (principio ALARA: "As Low As Reasonably Achievable").`,
+                quiz: [
+                    {
+                        question: `¿Cuál es la razón principal para solicitar una Entero-RM o Entero-TC en un paciente con Enfermedad de Crohn?`,
+                        options: [
+                            "Para sustituir la necesidad de una colonoscopia.",
+                            "Para evaluar el esófago y el estómago.",
+                            "Para visualizar el intestino delgado (que no se alcanza con la colonoscopia) y detectar complicaciones fuera del intestino (transmurales).",
+                            "Para medir los niveles de inflamación en la sangre."
+                        ],
+                        answer: 2,
+                        justification: `La colonoscopia es excelente para ver el colon, pero es "ciega" a la mayor parte del intestino delgado. La Entero-RM/TC nos da un mapa completo, mostrando la extensión de la enfermedad en el yeyuno e íleon, y detectando problemas "escondidos" fuera del lumen intestinal como abscesos, fístulas o inflamación del mesenterio.`,
+                        source: `Kucharzik T, Taylor S, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 1. J Crohns Colitis. 2025;19(7):jjaf106. doi:10.1093/ecco-jcc/jjaf106.`
+                    },
+                    {
+                        question: `En la Clasificación de Montreal, ¿a qué se refiere la letra "B"?`,
+                        options: [
+                            "Al nivel de Biomarcadores (PCR, calprotectina).",
+                            "A la necesidad de tratamiento Biológico.",
+                            "Al Biotipo del paciente (su complexión física).",
+                            "Al comPortamiento (Behavior) de la enfermedad (inflamatorio, estenosante o penetrante)."
+                        ],
+                        answer: 3,
+                        justification: `La "B" de la clasificación describe el "comportamiento" o fenotipo de la enfermedad. Nos dice si la enfermedad se manifiesta principalmente con inflamación (B1), si ha causado estrecheces (B2), o si ha formado fístulas (B3). Esto es muy importante para el pronóstico.`,
+                        source: `Dolinger M, Torres J, Vermeire S. Crohn's disease. The Lancet. 2024; S0140-6736(24)01463-7. doi:10.1016/S0140-6736(24)01463-7.`
+                    },
+                    {
+                        question: `¿Qué es el "signo del peine" (comb sign) que se puede ver en una Entero-TC?`,
+                        options: [
+                            "Un patrón de la mucosa que parece un peine.",
+                            "La apariencia de los vasos sanguíneos del mesenterio (la grasa que sujeta el intestino), que están ingurgitados y separados, pareciendo los dientes de un peine.",
+                            "Múltiples fístulas que salen del intestino.",
+                            "Un artefacto de la imagen sin importancia clínica."
+                        ],
+                        answer: 1,
+                        justification: `Este es un signo radiológico clásico de actividad en la EC. La intensa inflamación transmural del intestino provoca un aumento del flujo sanguíneo hacia esa zona. Esto hace que los pequeños vasos rectos del mesenterio se dilaten y se separen, creando una imagen que recuerda a un peine y que indica una inflamación severa.`,
+                        source: `Yanai H, Feakins R, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 2. J Crohns Colitis. 2025;19(7):jjaf107. doi:10.1093/ecco-jcc/jjaf107.`
+                    },
+                    {
+                        question: `(Metacognitiva) Tienes un paciente con alta sospecha de Crohn en el intestino delgado, pero la Entero-RM es normal. El paciente sigue con síntomas y anemia. ¿Qué error estarías cometiendo si das de alta al paciente asumiendo que no tiene nada?`,
+                        options: [
+                            "No confiar en la palabra del paciente.",
+                            "No repetir la analítica de sangre.",
+                            "Olvidar que la Entero-RM es excelente para ver la afectación transmural, pero puede no detectar lesiones mucosas tempranas o superficiales.",
+                            "No haber pedido una Entero-TC en lugar de una Entero-RM."
+                        ],
+                        answer: 2,
+                        justification: `Las técnicas de imagen como la RM/TC ven el "exterior" y el grosor de la pared. La enfermedad de Crohn puede empezar con lesiones solo en la mucosa (la capa más interna), como pequeñas úlceras. En estos casos, la prueba más sensible es la cápsula endoscópica, que es como una colonoscopia para el intestino delgado. No considerarla sería pasar por alto una posible enfermedad en fase inicial.`,
+                        source: `Kucharzik T, Taylor S, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 1. J Crohns Colitis. 2025;19(7):jjaf106. doi:10.1093/ecco-jcc/jjaf106.`
+                    },
+                    {
+                        question: `¿Qué significa un paciente clasificado como L1, A2, B1p según Montreal?`,
+                        options: [
+                            "Enfermedad solo en el colon, diagnosticada en la infancia, con fístulas.",
+                            "Enfermedad en íleon terminal, diagnosticada entre los 17-40 años, de comportamiento inflamatorio y con afectación perianal.",
+                            "Enfermedad en tracto digestivo alto, diagnosticada después de los 40, con estenosis.",
+                            "Enfermedad ileocolónica, diagnosticada a cualquier edad, sin complicaciones."
+                        ],
+                        answer: 1,
+                        justification: `Desglosar la clasificación es clave: L1=Íleon terminal; A2=diagnosticado entre 17 y 40 años; B1=comportamiento inflamatorio (sin estenosis ni fístulas); y el modificador 'p' indica la presencia de enfermedad perianal. Esta clasificación nos da una "foto" completa del fenotipo del paciente.`,
+                        source: `Dolinger M, Torres J, Vermeire S. Crohn's disease. The Lancet. 2024; S0140-6736(24)01463-7. doi:10.1016/S0140-6736(24)01463-7.`
+                    }
+                ]
+            }
+        ];
+
+        let userProgress = {};
+        let currentModuleId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            loadProgress();
+            renderModuleList();
+            renderBibliography();
+            
+            let lastModuleId = null;
+            try {
+                lastModuleId = localStorage.getItem('crohnCourseLastModuleId');
+            } catch (e) {
+                console.error("Error fetching last module:", e);
+            }
+            displayModule(lastModuleId ? parseInt(lastModuleId) : null);
+
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            const resetButton = document.getElementById('reset-button');
+            const resetModal = document.getElementById('reset-modal');
+            const cancelReset = document.getElementById('cancel-reset');
+            const confirmReset = document.getElementById('confirm-reset');
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const bibliographyButton = document.getElementById('bibliography-button');
+            const bibliographyModal = document.getElementById('bibliography-modal');
+            const closeBibliographyModal = document.getElementById('close-bibliography-modal');
+            const homeButton = document.getElementById('home-button');
+            
+            const summaryModal = document.getElementById('summary-modal');
+            const closeSummaryModal = document.getElementById('close-summary-modal');
+
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+
+            resetButton.addEventListener('click', () => {
+                resetModal.classList.remove('hidden');
+                setTimeout(() => {
+                    resetModal.querySelector('div').classList.remove('scale-95');
+                }, 10);
+            });
+            cancelReset.addEventListener('click', () => {
+                resetModal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => resetModal.classList.add('hidden'), 300);
+            });
+            confirmReset.addEventListener('click', resetProgress);
+            
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            bibliographyButton.addEventListener('click', showBibliographyModal);
+            closeBibliographyModal.addEventListener('click', hideBibliographyModal);
+            bibliographyModal.addEventListener('click', (event) => {
+                if (event.target === bibliographyModal) {
+                    hideBibliographyModal();
+                }
+            });
+
+            closeSummaryModal.addEventListener('click', hideSummaryModal);
+            summaryModal.addEventListener('click', (event) => {
+                if (event.target === summaryModal) {
+                    hideSummaryModal();
+                }
+            });
+
+            homeButton.addEventListener('click', () => displayModule(null));
+        }
+        
+        function initializeProgress() {
+            userProgress = {};
+            const totalModules = 18; // Updated total
+            for (let i = 1; i <= totalModules; i++) {
+                userProgress[i] = { completed: false, score: 0, answers: {} };
+            }
+        }
+        
+        function loadProgress() {
+            try {
+                const savedProgress = localStorage.getItem('crohnCourseProgress');
+                let loadedProgress = savedProgress ? JSON.parse(savedProgress) : {};
+                
+                // Ensure progress exists for all 18 modules
+                for (let i = 1; i <= 18; i++) {
+                    if (!loadedProgress[i]) {
+                        loadedProgress[i] = { completed: false, score: 0, answers: {} };
+                    }
+                }
+                userProgress = loadedProgress;
+
+            } catch (e) {
+                console.error("Error loading progress:", e);
+                initializeProgress();
+            }
+            saveProgress();
+            updateProgressBar();
+        }
+
+
+        function saveProgress() {
+            try {
+                localStorage.setItem('crohnCourseProgress', JSON.stringify(userProgress));
+                if (currentModuleId) {
+                    localStorage.setItem('crohnCourseLastModuleId', currentModuleId);
+                } else {
+                    localStorage.removeItem('crohnCourseLastModuleId');
+                }
+            } catch (e) {
+                console.error("Error saving progress:", e);
+            }
+        }
+        
+        function resetProgress() {
+            try {
+                localStorage.removeItem('crohnCourseProgress');
+                localStorage.removeItem('crohnCourseLastModuleId');
+
+            } catch (e) {
+                console.error("Error resetting progress:", e);
+            }
+            window.location.reload();
+        }
+
+        function renderModuleList() {
+            const list = document.getElementById('module-list');
+            list.innerHTML = '';
+            const totalModulesInCourse = 18; // Updated total
+            const fullModuleList = [
+                "Módulo 1: ¿Qué es la Enfermedad de Crohn? Conceptos Fundamentales",
+                "Módulo 2: ¿Por Qué Ocurre? Fisiopatología y Presentación Clínica",
+                "Módulo 3: El Proceso Diagnóstico: Uniendo las Piezas",
+                "Módulo 4: El Papel de la Imagen y la Clasificación",
+                "Módulo 5: Diagnóstico por Laboratorio e Imagen Avanzada",
+                "Módulo 6: Tratamiento Médico: Inducción a la Remisión",
+                "Módulo 7: Tratamiento Médico: Mantenimiento de la Remisión",
+                "Módulo 8: Terapias Biológicas y Moléculas Pequeñas",
+                "Módulo 9: Monitoreo Terapéutico (TDM) y Estrategia 'Treat-to-Target'",
+                "Módulo 10: Tratamiento Quirúrgico: Indicaciones y Técnicas",
+                "Módulo 11: Manejo de la Enfermedad Perianal",
+                "Módulo 12: Manejo de Complicaciones (Estenosis, Fístulas, Abscesos)",
+                "Módulo 13: Nutrición y Terapias Complementarias",
+                "Módulo 14: Manejo en Poblaciones Especiales (Embarazo, Pediatría, Ancianos)",
+                "Módulo 15: Prevención y Manejo de Manifestaciones Extraintestinales (MEI)",
+                "Módulo 16: Vigilancia de Displasia y Cáncer Colorrectal",
+                "Módulo 17: Calidad de Vida, Seguimiento y Pronóstico",
+                "Módulo 18: Futuras Direcciones en Investigación y Tratamiento"
+            ];
+
+            for (let i = 1; i <= totalModulesInCourse; i++) {
+                const module = courseModules.find(m => m.id === i);
+                const li = document.createElement('li');
+                
+                const progress = userProgress[i] || { completed: false };
+                const isCompleted = progress.completed;
+                const isActive = i === currentModuleId;
+                
+                const isDefined = !!module;
+
+                const baseClasses = 'p-3 rounded-lg cursor-pointer transition-all duration-200 flex items-center gap-3';
+                let stateClasses;
+                let iconHtml;
+                let titleText;
+
+                titleText = fullModuleList[i-1] || `Módulo ${i}`;
+
+                if (!isDefined) {
+                    stateClasses = 'bg-slate-800 text-slate-500 cursor-not-allowed';
+                    iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-50 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>`;
+                } else {
+                    stateClasses = 'bg-slate-700 hover:bg-slate-600 hover:pl-4';
+                    iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-70 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 16c1.255 0 2.443-.29 3.5-.804V4.804zM14.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 0114.5 16c1.255 0 2.443-.29 3.5-.804v-10A7.968 7.968 0 0014.5 4z" /></svg>`;
+                }
+
+                if (isCompleted) {
+                    stateClasses = 'bg-emerald-800/80 hover:bg-emerald-700/80 text-emerald-300';
+                    iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
+                }
+                
+                if (isDefined && isActive) {
+                    stateClasses = 'bg-sky-600 font-bold text-white shadow-lg';
+                }
+
+                let summaryButtonHtml = '';
+                if (isCompleted) { // Only show summary button if module is completed
+                    summaryButtonHtml = `<button title="Ver resumen del módulo" onclick="event.stopPropagation(); showModuleSummary(${i});" class="p-1 text-slate-400 hover:text-white rounded-full hover:bg-slate-500 transition-colors flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
+                    </button>`;
+                }
+
+                li.className = `${baseClasses} ${stateClasses}`;
+                li.innerHTML = `<div class="flex items-center gap-3 flex-1 min-w-0">${iconHtml} <span class="truncate">${titleText}</span></div> ${summaryButtonHtml}`;
+
+                if (isDefined) {
+                    li.dataset.moduleId = i;
+                    li.onclick = () => {
+                        displayModule(i);
+                        if (window.innerWidth < 1024) {
+                            document.getElementById('sidebar').classList.add('-translate-x-full');
+                            document.getElementById('sidebar-overlay').classList.add('hidden');
+                        }
+                    };
+                }
+                list.appendChild(li);
+            }
+        }
+        
+        function displayWelcomeScreen() {
+            const displayArea = document.getElementById('module-display');
+            const totalModules = 18; // Updated total
+            const firstUncompletedId = Object.keys(userProgress).sort((a,b) => a-b).find(id => userProgress[id] && !userProgress[id].completed);
+
+            const moduleTitles = [
+                    "Módulo 1: ¿Qué es la Enfermedad de Crohn? Conceptos Fundamentales",
+                    "Módulo 2: ¿Por Qué Ocurre? Fisiopatología y Presentación Clínica",
+                    "Módulo 3: El Proceso Diagnóstico: Uniendo las Piezas",
+                    "Módulo 4: El Papel de la Imagen y la Clasificación",
+                    "Módulo 5: Diagnóstico por Laboratorio e Imagen Avanzada",
+                    "Módulo 6: Tratamiento Médico: Inducción a la Remisión",
+                    "Módulo 7: Tratamiento Médico: Mantenimiento de la Remisión",
+                    "Módulo 8: Terapias Biológicas y Moléculas Pequeñas",
+                    "Módulo 9: Monitoreo Terapéutico (TDM) y Estrategia 'Treat-to-Target'",
+                    "Módulo 10: Tratamiento Quirúrgico: Indicaciones y Técnicas",
+                    "Módulo 11: Manejo de la Enfermedad Perianal",
+                    "Módulo 12: Manejo de Complicaciones (Estenosis, Fístulas, Abscesos)",
+                    "Módulo 13: Nutrición y Terapias Complementarias",
+                    "Módulo 14: Manejo en Poblaciones Especiales (Embarazo, Pediatría, Ancianos)",
+                    "Módulo 15: Prevención y Manejo de Manifestaciones Extraintestinales (MEI)",
+                    "Módulo 16: Vigilancia de Displasia y Cáncer Colorrectal",
+                    "Módulo 17: Calidad de Vida, Seguimiento y Pronóstico",
+                    "Módulo 18: Futuras Direcciones en Investigación y Tratamiento"
+            ];
+
+            let pathHtml = '<div class="relative mt-12 pl-6 sm:pl-8">';
+            pathHtml += '<div class="absolute left-0 top-0 h-full w-1 bg-slate-200 dark:bg-slate-700 ml-[15px] rounded"></div>';
+
+            for (let i = 1; i <= totalModules; i++) {
+                const module = courseModules.find(m => m.id === i);
+                const progress = userProgress[i] || { completed: false };
+                const isCompleted = progress.completed;
+                const isNext = !isCompleted && i == firstUncompletedId;
+                const isDefined = !!module;
+
+                let nodeClasses = 'absolute left-0 top-6 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm border-4 transition-all duration-300';
+                let cardClasses = 'relative ml-12 p-5 rounded-xl shadow-lg border-l-4 transition-all duration-300';
+                let titleClasses = 'font-bold text-slate-800 text-lg';
+                let statusText = '';
+                let statusTextClasses = 'text-xs font-bold uppercase';
+                let nodeIcon = i;
+                let cardAction = '';
+                
+                let title = moduleTitles[i-1] || `Módulo ${i}`;
+
+                if (!isDefined) {
+                    nodeClasses += ' bg-slate-300 border-white dark:border-slate-800';
+                    cardClasses += ' bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 cursor-not-allowed';
+                    titleClasses += ' text-slate-500 dark:text-slate-400';
+                    statusText = isCompleted ? 'Completado' : 'No disponible';
+                    statusTextClasses += ' text-slate-400 dark:text-slate-500';
+                } else if (isCompleted) {
+                    nodeClasses += ' bg-emerald-500 border-white dark:border-slate-800';
+                    nodeIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`;
+                    cardClasses += ' bg-white dark:bg-slate-800 border-emerald-500 cursor-pointer hover:shadow-xl hover:scale-[1.02]';
+                    titleClasses += ' dark:text-slate-200';
+                    statusText = 'Completado';
+                    statusTextClasses += ' text-emerald-600 dark:text-emerald-400';
+                    cardAction = `onclick="displayModule(${i})"`;
+                } else if (isNext) {
+                    nodeClasses += ' bg-sky-500 border-white dark:border-slate-800 animate-pulse';
+                    cardClasses += ' bg-sky-50 dark:bg-sky-900/20 border-sky-500 cursor-pointer hover:shadow-xl hover:scale-[1.02]';
+                    titleClasses += ' dark:text-slate-200';
+                    statusText = 'Siguiente Módulo';
+                    statusTextClasses += ' text-sky-600 dark:text-sky-400';
+                    cardAction = `onclick="displayModule(${i})"`;
+                } else { 
+                    nodeClasses += ' bg-slate-400 border-white dark:border-slate-800';
+                    cardClasses += ' bg-white dark:bg-slate-800 border-slate-400 dark:border-slate-700 cursor-pointer hover:shadow-xl hover:scale-[1.02]';
+                    titleClasses += ' dark:text-slate-200';
+                    statusText = 'Pendiente';
+                    statusTextClasses += ' text-slate-500 dark:text-slate-400';
+                    cardAction = `onclick="displayModule(${i})"`;
+                }
+                
+                pathHtml += `
+                    <div class="relative mb-10">
+                        <div class="${nodeClasses}">${nodeIcon}</div>
+                        <div class="${cardClasses}" ${cardAction}>
+                            <p class="${statusTextClasses}">${statusText}</p>
+                            <h3 class="${titleClasses}">${title}</h3>
+                        </div>
+                    </div>
+                `;
+            }
+            pathHtml += '</div>';
+
+            displayArea.innerHTML = `
+                <div class="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-2xl shadow-xl">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-slate-200 text-center">Ruta de Aprendizaje: Enfermedad de Crohn</h2>
+                    <p class="text-slate-600 dark:text-slate-400 mt-3 max-w-2xl mx-auto text-center">Selecciona un módulo para comenzar o continúa donde lo dejaste. Tu progreso se guarda automáticamente.</p>
+                    <div class="mt-2">
+                        ${pathHtml}
+                    </div>
+                    <div class="mt-12 border-t dark:border-slate-700 pt-8">
+                        <div class="bg-slate-100 dark:bg-slate-800 p-6 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h4 class="font-bold text-slate-800 dark:text-slate-200 text-lg">Resumen del Curso</h4>
+                                <p class="text-slate-600 dark:text-slate-400">Consulta los conceptos clave en cualquier momento.</p>
+                            </div>
+                            <button onclick="showGeneralSummary()" class="bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-400 font-semibold py-2 px-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-600 hover:bg-sky-50 dark:hover:bg-slate-600 transition-all active:scale-95 flex-shrink-0">
+                                Ver Síntesis Clave
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        function displayModule(moduleId) {
+            const homeButton = document.getElementById('home-button');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const menuToggle = document.getElementById('menu-toggle');
+
+            if (!document.getElementById('main-content')) return;
+            document.getElementById('main-content').scrollTop = 0;
+            
+            const displayArea = document.getElementById('module-display');
+            if (!displayArea) return;
+            displayArea.classList.add('opacity-0');
+
+            setTimeout(() => {
+                currentModuleId = moduleId ? parseInt(moduleId) : null;
+                saveProgress();
+
+                if (!currentModuleId) {
+                    homeButton.classList.add('hidden');
+                    menuToggle.classList.add('hidden');
+                    sidebar.classList.remove('lg:translate-x-0');
+                    mainContent.classList.remove('lg:ml-80');
+                    homeButton.classList.remove('lg:left-[21rem]');
+
+                    displayWelcomeScreen();
+                    renderModuleList(); 
+                    displayArea.classList.remove('opacity-0');
+                    return;
+                }
+            
+                homeButton.classList.remove('hidden');
+                menuToggle.classList.remove('hidden');
+                sidebar.classList.add('lg:translate-x-0');
+                mainContent.classList.add('lg:ml-80');
+                homeButton.classList.add('lg:left-[21rem]');
+                
+                const moduleData = courseModules.find(m => m.id === currentModuleId);
+                
+                if (!moduleData) {
+                    console.error("Module not found:", currentModuleId);
+                    displayModule(null);
+                    displayArea.classList.remove('opacity-0');
+                    return;
+                }
+                
+                if (userProgress[currentModuleId] && userProgress[currentModuleId].completed) {
+                    showCompletedModule(currentModuleId);
+                } else {
+                    showActiveModule(currentModuleId);
+                }
+
+                renderModuleList();
+                displayArea.classList.remove('opacity-0');
+            }, 200);
+        }
+
+        function showActiveModule(moduleId) {
+            const moduleData = courseModules.find(m => m.id === moduleId);
+            const displayArea = document.getElementById('module-display');
+
+            let quizHtml = `<form class="quiz-form space-y-6 mt-8" id="quiz-form-${moduleId}">`;
+            moduleData.quiz.forEach((q, index) => {
+                quizHtml += `<div class="question-block bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700" id="q-block-${moduleId}-${index}">
+                                        <p class="font-semibold text-slate-800 dark:text-slate-200 mb-4 text-base sm:text-lg">${index + 1}. ${q.question}</p>
+                                        <div class="space-y-3">`;
+                q.options.forEach((opt, optIndex) => {
+                    quizHtml += `<label class="flex items-center p-4 border-2 border-slate-200 dark:border-slate-600 rounded-lg cursor-pointer transition-all duration-200 hover:bg-sky-50 dark:hover:bg-sky-900/30 hover:border-sky-400 dark:hover:border-sky-500 has-[:checked]:bg-sky-100 dark:has-[:checked]:bg-sky-900/50 has-[:checked]:border-sky-500">
+                                                 <input type="radio" name="q${index}" value="${optIndex}" class="h-5 w-5 text-sky-600 border-slate-300 focus:ring-sky-500 focus:ring-2">
+                                                 <span class="ml-4 text-slate-700 dark:text-slate-300">${opt}</span>
+                                             </label>`;
+                });
+                quizHtml += `</div></div>`;
+            });
+            quizHtml += `<button type="button" class="submit-quiz-btn w-full sm:w-auto bg-sky-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-all hover:bg-sky-700 active:scale-95 disabled:bg-slate-400 disabled:cursor-not-allowed" onclick="submitQuiz(${moduleId})">Validar Respuestas</button></form>`;
+
+            displayArea.innerHTML = `
+                <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-200">${moduleData.title}</h2>
+                    <div class="mt-6">
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 mb-3">Caso Clínico</h3>
+                        <div class="case-study bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 dark:border-amber-400 p-5 rounded-r-lg text-amber-900 dark:text-amber-200 space-y-2">${moduleData.clinicalCase}</div>
+                    </div>
+                    <div class="mt-8">
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">Test de Autoevaluación</h3>
+                        ${quizHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function showCompletedModule(moduleId) {
+            const moduleData = courseModules.find(m => m.id === parseInt(moduleId));
+            const progressData = userProgress[moduleId];
+            const displayArea = document.getElementById('module-display');
+            
+            const nextModuleId = parseInt(moduleId) + 1;
+            
+            let quizHtml = '<div class="quiz-form space-y-8 mt-6">';
+            moduleData.quiz.forEach((q, index) => {
+                const userAnswer = progressData.answers ? progressData.answers[index] : null;
+                const isCorrect = userAnswer === q.answer;
+                const sourceCitation = q.source;
+
+                let feedbackHtml = `<div class="question-block bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700">
+                                        <p class="font-semibold text-slate-800 dark:text-slate-200 mb-4 text-base sm:text-lg">${index + 1}. ${q.question}</p>
+                                        <div class="space-y-3">`;
+                
+                q.options.forEach((opt, optIndex) => {
+                    const isUserAnswer = optIndex === userAnswer;
+                    const isCorrectAnswer = optIndex === q.answer;
+                    
+                    let labelClasses = 'flex items-center justify-between p-4 border-2 rounded-lg';
+                    let icon = '';
+
+                    if (isCorrectAnswer) {
+                        labelClasses += ' bg-emerald-50 dark:bg-emerald-900/30 border-emerald-500';
+                        if (isUserAnswer) icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
+                    } else if (isUserAnswer) {
+                        labelClasses += ' bg-red-50 dark:bg-red-900/30 border-red-500';
+                        icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 dark:text-red-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>`;
+                    } else {
+                         labelClasses += ' border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 opacity-80';
+                    }
+
+                    feedbackHtml += `<div class="${labelClasses}">
+                                                 <span class="text-slate-700 dark:text-slate-300">${opt}</span>
+                                                 ${icon}
+                                             </div>`;
+                });
+                
+                const justificationClasses = `mt-4 p-4 rounded-lg border-l-4 ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-500 text-emerald-900 dark:text-emerald-200' : 'bg-red-50 dark:bg-red-900/30 border-red-500 text-red-900 dark:text-red-200'}`;
+                const justificationHtml = `<div class="${justificationClasses}">
+                                                 <p><strong class="font-bold">${isCorrect ? 'Correcto' : 'Incorrecto'}.</strong> ${q.justification}</p>
+                                                 <p class="text-sm italic mt-2 opacity-80">Fuente: ${sourceCitation}</p>
+                                             </div>`;
+
+                feedbackHtml += `</div>${justificationHtml}</div>`;
+                quizHtml += feedbackHtml;
+            });
+            quizHtml += '</div>';
+
+            let nextModuleButton = '';
+            
+            if (nextModuleId <= 18) { 
+                nextModuleButton = `<button class="mt-10 w-full sm:w-auto bg-sky-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-all hover:bg-sky-700 active:scale-95 text-lg" onclick="displayModule(${nextModuleId})">
+                    Continuar al Siguiente Módulo
+                </button>`;
+            } else {
+                 nextModuleButton = `<button class="mt-10 w-full sm:w-auto bg-emerald-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-all hover:bg-emerald-700 active:scale-95 text-lg" onclick="showFinalSummary()">Ver Resumen Final</button>`;
+            }
+            
+            displayArea.innerHTML = `
+                <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-200">${moduleData.title} (Revisión)</h2>
+                    <div class="mt-6">
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 mb-3">Caso Clínico</h3>
+                        <div class="case-study bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 dark:border-amber-400 p-5 rounded-r-lg text-amber-900 dark:text-amber-200 space-y-2">${moduleData.clinicalCase}</div>
+                        ${moduleData.clinicalCaseAnswer ? `
+                        <div class="mt-4 bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 dark:border-green-500 p-5 rounded-r-lg text-green-900 dark:text-green-200">
+                            <h4 class="font-bold">Resolución de la Pregunta Clave:</h4>
+                            <p class="mt-2">${moduleData.clinicalCaseAnswer}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 mt-8">Resultados del Test</h3>
+                    ${quizHtml}
+                    <div class="text-center">
+                        ${nextModuleButton}
+                    </div>
+                </div>`;
+        }
+
+
+        function submitQuiz(moduleId) {
+            const moduleData = courseModules.find(m => m.id === moduleId);
+            const form = document.getElementById('quiz-form-' + moduleId);
+            let score = 0;
+            let userAnswers = {};
+
+            moduleData.quiz.forEach((q, index) => {
+                const selectedOption = form.querySelector(`input[name="q${index}"]:checked`);
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    userAnswers[index] = answerIndex;
+                    if (answerIndex === q.answer) {
+                        score++;
+                    }
+                } else {
+                    userAnswers[index] = null;
+                }
+            });
+            
+            userProgress[moduleId].completed = true;
+            userProgress[moduleId].score = score;
+            userProgress[moduleId].answers = userAnswers;
+            
+            saveProgress();
+            updateProgressBar();
+            renderModuleList();
+            
+            showCompletedModule(moduleId);
+            
+            checkCourseCompletion();
+        }
+
+        function updateProgressBar() {
+            if (!userProgress || Object.keys(userProgress).length === 0) return;
+            const totalModulesInCourse = 18; // Updated total
+            let completedCount = 0;
+            for(let i=1; i <= totalModulesInCourse; i++){
+                if(userProgress[i] && userProgress[i].completed){
+                    completedCount++;
+                }
+            }
+            const percentage = totalModulesInCourse > 0 ? (completedCount / totalModulesInCourse) * 100 : 0;
+            
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = Math.round(percentage) + '%';
+        }
+
+        function checkCourseCompletion() {
+            const totalModulesInCourse = 18; // Updated total
+            let completedCount = 0;
+            for (let i = 1; i <= totalModulesInCourse; i++) {
+                 if(userProgress[i] && userProgress[i].completed){
+                    completedCount++;
+                }
+            }
+
+            if (completedCount === totalModulesInCourse) {
+                setTimeout(showFinalSummary, 1000);
+            }
+        }
+
+        function showFinalSummary() {
+            let totalScore = 0;
+            let totalQuestions = 0;
+            
+            const fullModuleList = [
+                "Módulo 1: Principios Básicos: Definición, Epidemiología y Etiología",
+                "Módulo 2: Fisiopatología y Anatomía Patológica",
+                "Módulo 3: Manifestaciones Clínicas y Clasificación",
+                "Módulo 4: Proceso Diagnóstico: De la Sospecha al Abordaje Inicial",
+                "Módulo 5: Diagnóstico por Laboratorio e Imagen Avanzada",
+                "Módulo 6: Tratamiento Médico: Inducción a la Remisión",
+                "Módulo 7: Tratamiento Médico: Mantenimiento de la Remisión",
+                "Módulo 8: Terapias Biológicas y Moléculas Pequeñas",
+                "Módulo 9: Monitoreo Terapéutico (TDM) y Estrategia 'Treat-to-Target'",
+                "Módulo 10: Tratamiento Quirúrgico: Indicaciones y Técnicas",
+                "Módulo 11: Manejo de la Enfermedad Perianal",
+                "Módulo 12: Manejo de Complicaciones (Estenosis, Fístulas, Abscesos)",
+                "Módulo 13: Nutrición y Terapias Complementarias",
+                "Módulo 14: Manejo en Poblaciones Especiales (Embarazo, Pediatría, Ancianos)",
+                "Módulo 15: Prevención y Manejo de Manifestaciones Extraintestinales (MEI)",
+                "Módulo 16: Vigilancia de Displasia y Cáncer Colorrectal",
+                "Módulo 17: Calidad de Vida, Seguimiento y Pronóstico",
+                "Módulo 18: Futuras Direcciones en Investigación y Tratamiento"
+            ];
+
+            let moduleScoresHtml = '<div class="space-y-4 mt-6">';
+            
+            for(let i = 1; i <= 18; i++) {
+                const progress = userProgress[i];
+                if (progress && progress.completed) {
+                    let moduleTitle = fullModuleList[i-1];
+                    let moduleTotalQuestions = 5; // Assuming 5 questions per module
+                    
+                    const moduleScore = progress.score;
+                    totalScore += moduleScore;
+                    totalQuestions += moduleTotalQuestions;
+                    const percentage = moduleTotalQuestions > 0 ? (moduleScore / moduleTotalQuestions) * 100 : 0;
+
+                    moduleScoresHtml += `
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-base font-medium text-slate-700 dark:text-slate-300">${moduleTitle}</span>
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">${moduleScore} / ${moduleTotalQuestions}</span>
+                            </div>
+                            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-sky-600 h-2.5 rounded-full" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+            };
+            moduleScoresHtml += '</div>';
+            
+            const finalPercentage = totalQuestions > 0 ? (totalScore / totalQuestions) * 100 : 0;
+            
+            const displayArea = document.getElementById('module-display');
+            displayArea.innerHTML = `
+                <div id="final-score-screen" class="bg-white dark:bg-slate-800 p-8 sm:p-12 rounded-2xl shadow-xl transform transition-all duration-500 scale-100 opacity-100">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-emerald-600">¡Curso Completado!</h2>
+                    <p class="text-slate-600 dark:text-slate-400 mt-2">Has finalizado todos los módulos disponibles. Aquí está tu resumen de calificaciones.</p>
+                    <div class="text-left mt-8">
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">Calificación por Módulo</h3>
+                        ${moduleScoresHtml}
+                    </div>
+                    <div class="mt-8 pt-6 border-t dark:border-slate-700">
+                         <p class="text-slate-700 dark:text-slate-300">Tu calificación final es:</p>
+                        <p id="score-value" class="text-5xl sm:text-7xl font-bold text-slate-800 dark:text-slate-200 mt-2">${Math.round(finalPercentage)}<span class="text-3xl text-slate-500 dark:text-slate-400"> / 100</span></p>
+                    </div>
+                </div>`;
+        }
+
+        // --- Modals & Helper Functions ---
+        function showGeneralSummary() {
+            const titleEl = document.getElementById('summary-modal-title');
+            const contentEl = document.getElementById('summary-content');
+            if (titleEl && contentEl) {
+                titleEl.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
+                    Síntesis Clave en Enfermedad de Crohn
+                `;
+                contentEl.innerHTML = summaryContentHtml;
+            }
+            showSummaryModal();
+        }
+
+        function showModuleSummary(moduleId) {
+            const module = courseModules.find(m => m.id === moduleId);
+             if (!module || !module.summary) {
+                console.warn(`Summary for module ${moduleId} not found.`);
+                alert("El resumen para este módulo no está disponible.");
+                return;
+            }
+
+            const titleEl = document.getElementById('summary-modal-title');
+            const contentEl = document.getElementById('summary-content');
+            if (titleEl && contentEl) {
+                titleEl.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 16c1.255 0 2.443-.29 3.5-.804V4.804zM14.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 0114.5 16c1.255 0 2.443-.29 3.5-.804v-10A7.968 7.968 0 0014.5 4z" /></svg>
+                    Resumen: ${module.title}
+                `;
+                contentEl.innerHTML = `<p>${module.summary}</p>`;
+            }
+            showSummaryModal();
+        }
+
+        function showSummaryModal() {
+            const modal = document.getElementById('summary-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function hideSummaryModal() {
+            const modal = document.getElementById('summary-modal');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function showBibliographyModal() {
+            const modal = document.getElementById('bibliography-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function hideBibliographyModal() {
+            const modal = document.getElementById('bibliography-modal');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function renderBibliography() {
+            const bibliographyContent = document.getElementById('bibliography-content');
+            if (!bibliographyContent) return;
+
+            const allSources = [
+                "Adamina M, Minozzi S, Warusavitarne J, et al. ECCO Guidelines on Therapeutics in Crohn's Disease: Surgical Treatment. J Crohns Colitis. 2024;18(10):1556-1582. doi:10.1093/ecco-jcc/jjae089.",
+                "Bencardino S, D'Amico F, Zilli A, et al. Fecal, Blood, and Urinary Biomarkers in Inflammatory Bowel Diseases. J Transl Gastroenterol. 2024;2(2):61-75. doi:10.14218/JTG.2024.00001.",
+                "Clough J, Colwill M, Poullis A, et al. Biomarkers in inflammatory bowel disease: a practical guide. Ther Adv Gastroenterol. 2024;17:17562848241261313. doi:10.1177/17562848241261313.",
+                "Dolinger M, Torres J, Vermeire S. Crohn's disease. The Lancet. 2024; S0140-6736(24)01463-7. doi:10.1016/S0140-6736(24)01463-7.",
+                "Farraye FA, Melmed GY, Lichtenstein GR, et al. ACG Clinical Guideline Update: Preventive Care in Inflammatory Bowel Disease. Am J Gastroenterol. 2025;120(9):1447-1473. doi:10.14309/ajg.0000000000003050.",
+                "Gordon H, Minozzi S, Kopylov U, et al. ECCO Guidelines on Therapeutics in Crohn's Disease: Medical Treatment. J Crohns Colitis. 2024;18(10):1531-1555. doi:10.1093/ecco-jcc/jjae091.",
+                "Kucharzik T, Taylor S, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 1. J Crohns Colitis. 2025;19(7):jjaf106. doi:10.1093/ecco-jcc/jjaf106.",
+                "Mahadevan U, Seow CH, Barnes EL, et al. Global Consensus Statement on the Management of Pregnancy in Inflammatory Bowel Disease. Inflamm Bowel Dis. 2025; izaf171. doi:10.1093/ibd/izaf171.",
+                "Svolos V, Gordon H, Lomer MCE, et al. ECCO Consensus on Dietary Management of Inflammatory Bowel Disease. J Crohns Colitis. 2025;19(8):jjaf122. doi:10.1093/ecco-jcc/jjaf122.",
+                "Yanai H, Feakins R, Allocca M, et al. ECCO-ESGAR-ESP-IBUS Guideline on Diagnostics and Monitoring of Patients with Inflammatory Bowel Disease: Part 2. J Crohns Colitis. 2025;19(7):jjaf107. doi:10.1093/ecco-jcc/jjaf107.",
+                "Zheng J, Sun Q, Zhang M, et al. Noninvasive, microbiome-based diagnosis of inflammatory bowel disease. Nat Med. 2024. doi:10.1038/s41591-024-03280-4."
+            ];
+            
+            bibliographyContent.innerHTML = '';
+            allSources.sort().forEach(citation => {
+                const item = document.createElement('div');
+                item.className = 'bg-slate-100 dark:bg-slate-700 p-3 rounded-lg flex items-start gap-3 text-sm';
+                item.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 dark:text-slate-400 flex-shrink-0 mt-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 16c1.255 0 2.443-.29 3.5-.804V4.804zM14.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 0114.5 16c1.255 0 2.443-.29 3.5-.804v-10A7.968 7.968 0 0014.5 4z" />
+                    </svg>
+                    <span>${citation}</span>
+                `;
+                bibliographyContent.appendChild(item);
+            });
+        }
+
+        function loadTheme() {
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            // On first load, if theme is not set, default to light.
+            if (!localStorage.getItem('theme')) {
+                localStorage.setItem('theme', 'light');
+            }
+            
+            if (localStorage.theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                if (sunIcon) sunIcon.classList.add('hidden');
+                if (moonIcon) moonIcon.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                if (sunIcon) sunIcon.classList.remove('hidden');
+                if (moonIcon) moonIcon.classList.add('hidden');
+            }
+        }
+
+
+        function toggleDarkMode() {
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            const isDark = document.documentElement.classList.toggle('dark');
+            if (isDark) {
+                localStorage.theme = 'dark';
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                localStorage.theme = 'light';
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
